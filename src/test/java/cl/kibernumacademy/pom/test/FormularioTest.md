@@ -4,9 +4,13 @@ package cl.kibernumacademy.pom.test;
 import cl.kibernumacademy.pom.page.FormularioPage; // Importa la clase Page Object
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;// Importa funciones de validación
 
 // Clase que contiene el test automatizado del formulario
@@ -32,17 +36,28 @@ public class FormularioTest {
         formularioPage.setLastName("Rodríguez"); // Ingresa apellido
         formularioPage.setEmail("laura@test.com"); // Ingresa email
         formularioPage.selectGender("Female"); // Selecciona género
-        formularioPage.setPhoneNumber("987654321"); // Ingresa teléfono
+        formularioPage.setPhoneNumber("9987654321"); // Ingresa teléfono
         formularioPage.selectHobby("Reading"); // Marca hobby Reading
         formularioPage.selectHobby("Music"); // Marca hobby Music
         formularioPage.setAddress("Dirección falsa 123"); // Ingresa dirección
         formularioPage.selectState("NCR"); // Selecciona Estado
         formularioPage.selectCity("Delhi"); // Selecciona Ciudad
 
+        formularioPage.clickSubmit();
         // Validaciones de que los datos ingresados están correctos
         assertEquals("Laura", formularioPage.getFirstName());
         assertEquals("laura@test.com", formularioPage.getEmail());
-        assertEquals("987654321", formularioPage.getPhoneNumber());
+        assertEquals("9987654321", formularioPage.getPhoneNumber());
+
+        // Espera a que el modal esté visible y luego lo cierra
+        WebElement modalTitle = new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.id("example-modal-sizes-title-lg")));
+
+        assertTrue(modalTitle.isDisplayed());
+        assertEquals("Thanks for submitting the form", modalTitle.getText());
+
+        // Cierra el modal
+        formularioPage.cerrarModal();
     }
 
     // Validaciones de que los datos ingresados están correctos

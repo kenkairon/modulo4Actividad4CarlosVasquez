@@ -1,6 +1,9 @@
 package cl.kibernumacademy.pom.page;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.time.Duration;
 
 // Clase que representa la página del formulario y encapsula todas sus interacciones
 public class FormularioPage {
@@ -82,4 +85,20 @@ public class FormularioPage {
     public String getPhoneNumber() {
         return driver.findElement(By.id("userNumber")).getAttribute("value");
     }
+
+    // Hace clic en el botón Submit para enviar el formulario
+    public void clickSubmit() {
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", submitButton);
+    }
+
+    // Cierra el modal de confirmación
+    // Espera a que el modal esté visible y luego lo cierra
+    public void cerrarModal() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        WebElement closeButton = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("closeLargeModal")));
+        closeButton.click();
+    }
+
 }
